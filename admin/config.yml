@@ -1,0 +1,154 @@
+# Decap CMS — the admin panel Desmond uses at /admin/
+# Everything here edits content.json, which is what the site renders from.
+# Saving commits to GitHub, and Netlify redeploys automatically.
+
+backend:
+  name: git-gateway
+  branch: main
+
+# CMS photo uploads land here. Paths already in content.json
+# (photos/modeling/..., photos/photography/...) keep working untouched.
+media_folder: "photos/uploads"
+public_folder: "photos/uploads"
+
+# Save = live. No review step, no pull requests.
+publish_mode: simple
+
+collections:
+  - name: site
+    label: "Website"
+    delete: false
+    files:
+      - name: content
+        label: "Site content"
+        file: "content.json"
+        format: json
+        description: "Everything on the site. Open a section, make a change, hit Publish."
+        fields:
+          - { name: siteTitle, label: "Browser tab title", widget: string }
+
+          - name: hero
+            label: "Home screen"
+            widget: object
+            collapsed: true
+            fields:
+              - { name: image, label: "Big background photo", widget: image }
+              - { name: stickerLine1, label: "Sticker — top line", widget: string }
+              - { name: stickerLine2, label: "Sticker — bottom line", widget: string }
+
+          - name: sections
+            label: "Portfolio sections"
+            label_singular: "Section"
+            widget: list
+            collapsed: true
+            summary: "{{fields.heading}}"
+            fields:
+              - { name: heading, label: "Section title", widget: string, hint: "Shows as the big sticker, e.g. MODELING" }
+              - name: categories
+                label: "Categories"
+                label_singular: "Category"
+                widget: list
+                collapsed: true
+                summary: "{{fields.name}}"
+                fields:
+                  - { name: name, label: "Category label", widget: string, required: false, hint: "e.g. FASHION. Leave blank for no label." }
+                  - name: projects
+                    label: "Photo tiles"
+                    label_singular: "Tile"
+                    widget: list
+                    collapsed: true
+                    summary: "Tile — {{fields.images.length}} photo(s)"
+                    fields:
+                      - { name: span, label: "Tile width", widget: number, value_type: int, default: 1, min: 1, max: 2, hint: "1 = normal, 2 = double-wide" }
+                      - name: images
+                        label: "Photos"
+                        widget: list
+                        field: { name: image, label: "Photo", widget: image }
+                        hint: "One photo = plain tile. Two or more = visitors click through them."
+
+          - name: casting
+            label: "Casting calls"
+            widget: object
+            collapsed: true
+            fields:
+              - { name: heading, label: "Section title", widget: string }
+              - { name: intro, label: "Intro text", widget: text }
+              - name: shoots
+                label: "Shoots"
+                label_singular: "Shoot"
+                widget: list
+                collapsed: true
+                required: false
+                summary: "{{fields.title}} — {{fields.date}}"
+                fields:
+                  - { name: title, label: "Shoot name", widget: string }
+                  - { name: date, label: "When", widget: string, hint: "e.g. August 2026" }
+                  - { name: location, label: "Where", widget: string }
+                  - { name: description, label: "Details", widget: text }
+                  - { name: open, label: "Still accepting applications", widget: boolean, default: true, hint: "Turn off once the shoot is cast — it disappears from the site." }
+
+          - name: fitOfTheWeek
+            label: "Fit Check (weekly contest)"
+            widget: object
+            collapsed: true
+            fields:
+              - { name: enabled, label: "Show this section on the site", widget: boolean, default: true }
+              - { name: heading, label: "Section title", widget: string }
+              - { name: tagline, label: "Tagline", widget: string, hint: "The big handwritten line" }
+              - { name: intro, label: "Explainer text", widget: text }
+              - { name: deadlineNote, label: "When you pick winners", widget: string, hint: "e.g. New winner picked every Sunday." }
+              - name: currentWinner
+                label: "This week's winner"
+                widget: object
+                collapsed: false
+                fields:
+                  - { name: name, label: "Name", widget: string, required: false }
+                  - { name: instagram, label: "Instagram", widget: string, required: false, hint: "@handle" }
+                  - { name: image, label: "Their fit photo", widget: image, required: false, hint: "Leave empty before the first winner — the site shows a 'coming soon' card instead." }
+                  - { name: week, label: "Week", widget: string, required: false, hint: "e.g. WEEK OF JUL 20" }
+                  - { name: note, label: "Why they won", widget: text, required: false }
+              - name: pastWinners
+                label: "Past winners"
+                label_singular: "Past winner"
+                widget: list
+                collapsed: true
+                required: false
+                summary: "{{fields.name}} — {{fields.week}}"
+                hint: "When you pick a new winner, move the old one down here."
+                fields:
+                  - { name: name, label: "Name", widget: string, required: false }
+                  - { name: instagram, label: "Instagram", widget: string, required: false }
+                  - { name: image, label: "Their fit photo", widget: image }
+                  - { name: week, label: "Week", widget: string, required: false }
+
+          - name: about
+            label: "About & contact"
+            widget: object
+            collapsed: true
+            fields:
+              - { name: photo, label: "Cutout portrait", widget: image, hint: "Needs a transparent background (PNG)." }
+              - { name: title, label: "Banner title", widget: string }
+              - { name: subtitle, label: "Banner subtitle", widget: string }
+              - { name: bannerColor, label: "Banner colour", widget: color }
+              - name: bio
+                label: "Bio paragraphs"
+                label_singular: "Paragraph"
+                widget: list
+                field: { name: paragraph, label: "Paragraph", widget: text }
+              - name: featuredIn
+                label: "Featured in"
+                label_singular: "Credit"
+                widget: list
+                required: false
+                field: { name: credit, label: "Credit", widget: string }
+                hint: "Publications or brands. Leave empty to hide this block."
+              - { name: email, label: "Booking email", widget: string }
+              - name: instagrams
+                label: "Instagram accounts"
+                label_singular: "Account"
+                widget: list
+                collapsed: true
+                summary: "@{{fields.handle}} — {{fields.label}}"
+                fields:
+                  - { name: handle, label: "Handle", widget: string, hint: "Without the @" }
+                  - { name: label, label: "Tag", widget: string, required: false, hint: "e.g. personal, photography" }

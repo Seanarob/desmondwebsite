@@ -1,0 +1,29 @@
+# Static site — nothing to build, just publish the folder as-is.
+[build]
+  publish = "."
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    X-Frame-Options = "SAMEORIGIN"
+
+# Photos are big and rarely change. One day of caching, not a year — Desmond
+# swaps images through the CMS and shouldn't have to wait out a stale cache.
+[[headers]]
+  for = "/photos/*"
+  [headers.values]
+    Cache-Control = "public, max-age=86400"
+
+# The content file drives the whole site, so it must always be fresh.
+[[headers]]
+  for = "/content.json"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+# Keep the CMS out of search results.
+[[headers]]
+  for = "/admin/*"
+  [headers.values]
+    X-Robots-Tag = "noindex"

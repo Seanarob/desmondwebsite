@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Desmond Flanagan — Model &amp; Photographer</title>
+  <meta name="description" content="Desmond Flanagan — model and photographer based in California. Fashion, sports, weddings and events. Open castings, bookings, and a weekly fit check.">
+  <meta name="theme-color" content="#000000">
+
+  <!-- Social preview. script.js rewrites these to absolute URLs at runtime so
+       they stay correct on netlify.app and on the custom domain alike. -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Desmond Flanagan — Model &amp; Photographer">
+  <meta property="og:description" content="Fashion, sports, weddings and events. Open castings, bookings, and a weekly fit check.">
+  <meta property="og:image" content="photos/modeling/34ae40bff2fa1edd80311eb908766a6e.JPG">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23000'/%3E%3Ctext x='16' y='23' font-family='Georgia,serif' font-size='21' font-weight='bold' fill='%2396ABE3' text-anchor='middle'%3ED%3C/text%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Comfortaa:wght@400;700&family=Baloo+2:wght@700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <header class="site-nav">
+    <a class="nav-wordmark" href="#hero">Desmond Flanagan</a>
+    <button class="nav-toggle" id="nav-toggle" aria-label="Menu" aria-expanded="false" aria-controls="menu-overlay">
+      <span></span><span></span><span></span>
+    </button>
+  </header>
+
+  <nav class="menu-overlay" id="menu-overlay" aria-hidden="true">
+    <ul class="menu-links" id="menu-links"></ul>
+    <div class="menu-contact" id="menu-contact"></div>
+  </nav>
+
+  <!-- PAGE 1: HERO — pinned in place while the photo pans, then releases into the page -->
+  <div class="hero-pin" id="hero-pin">
+    <section id="hero" class="hero">
+      <div class="hero-bg" id="hero-bg"></div>
+      <div class="hero-stickers">
+        <span class="sticker sticker-small" id="sticker-line-1"></span>
+        <span class="sticker sticker-big" id="sticker-line-2"></span>
+      </div>
+      <button class="scroll-arrow" id="scroll-arrow" aria-label="Scroll to work">
+        <svg viewBox="0 0 48 24" width="48" height="24" fill="none" stroke="white" stroke-width="3">
+          <polyline points="4,4 24,20 44,4"/>
+        </svg>
+      </button>
+    </section>
+  </div>
+
+  <!-- PAGE 2: WORK -->
+  <section id="work" class="work"></section>
+
+  <!-- CASTING / MODEL APPLICATIONS -->
+  <section id="casting" class="casting">
+    <div id="casting-header"></div>
+    <p class="casting-intro reveal" id="casting-intro"></p>
+    <div class="shoot-cards" id="shoot-cards"></div>
+
+    <form class="app-form reveal" id="application-form" name="model-application" method="POST" action="/" data-netlify="true" netlify-honeypot="bot-field">
+      <input type="hidden" name="form-name" value="model-application">
+      <p class="hp-field"><label>Don't fill this out: <input name="bot-field"></label></p>
+      <h3 class="form-title">apply</h3>
+      <div class="form-grid">
+        <label>Name<input type="text" name="name" required autocomplete="name"></label>
+        <label>Email<input type="email" name="email" required autocomplete="email"></label>
+        <label>Phone<input type="tel" name="phone" autocomplete="tel"></label>
+        <label>Instagram<input type="text" name="instagram" placeholder="@handle"></label>
+        <label>Age<input type="text" name="age" inputmode="numeric"></label>
+        <label>Height<input type="text" name="height" placeholder="e.g. 5'10&quot;"></label>
+      </div>
+      <label class="form-wide">Which shoot?
+        <select name="shoot" id="shoot-select">
+          <option value="General application">General application</option>
+        </select>
+      </label>
+      <label class="form-wide">Experience / anything else
+        <textarea name="message" rows="4"></textarea>
+      </label>
+      <button type="submit" class="form-submit">Send application</button>
+      <p class="form-status" aria-live="polite"></p>
+    </form>
+  </section>
+
+  <!-- FIT OF THE WEEK — weekly contest, winner is guaranteed a spot in a shoot -->
+  <section id="fit" class="fitweek">
+    <div id="fit-header"></div>
+    <p class="fit-tagline reveal" id="fit-tagline"></p>
+    <p class="casting-intro reveal" id="fit-intro"></p>
+
+    <div class="fit-winner-wrap" id="fit-winner"></div>
+    <div class="fit-past-wrap" id="fit-past"></div>
+
+    <form class="app-form fit-form reveal" id="fit-form" name="fit-of-the-week" method="POST" action="/"
+          enctype="multipart/form-data" data-netlify="true" netlify-honeypot="bot-field">
+      <input type="hidden" name="form-name" value="fit-of-the-week">
+      <p class="hp-field"><label>Don't fill this out: <input name="bot-field"></label></p>
+      <h3 class="form-title">send your fit</h3>
+
+      <!-- Clicking the dashed box opens the picker; the input itself is hidden
+           but stays in the form so Netlify receives the file. -->
+      <label class="fit-drop" id="fit-drop" for="fit-photo">
+        <input type="file" name="photo" id="fit-photo" accept="image/*" required>
+        <img class="fit-preview" id="fit-preview" alt="" hidden>
+        <span class="fit-drop-text" id="fit-drop-text">Tap to add your photo<small>full-body works best · jpg or png</small></span>
+      </label>
+
+      <div class="form-grid">
+        <label>Name<input type="text" name="name" required autocomplete="name"></label>
+        <label>Email<input type="email" name="email" required autocomplete="email"></label>
+        <label>Instagram<input type="text" name="instagram" placeholder="@handle"></label>
+        <label>City<input type="text" name="city" placeholder="e.g. Riverside"></label>
+      </div>
+      <label class="form-wide"><span class="label-row">What's the fit? <span class="label-optional">optional</span></span>
+        <textarea name="message" rows="3" placeholder="Where you wore it, what you're wearing, why it's the flyest"></textarea>
+      </label>
+      <button type="submit" class="form-submit">Submit my fit</button>
+      <p class="form-status" aria-live="polite"></p>
+      <p class="fit-finealt">By submitting you're okay with your photo being posted if you win.</p>
+    </form>
+  </section>
+
+  <!-- PAGE 3: ABOUT -->
+  <section id="about" class="about">
+    <div class="about-hero" id="about-hero">
+      <div class="about-banner" id="about-banner">
+        <h2 class="about-title" id="about-title"></h2>
+        <p class="about-subtitle" id="about-subtitle"></p>
+      </div>
+      <img class="about-photo" id="about-photo" alt="About portrait">
+    </div>
+    <div class="about-body">
+      <div class="bio reveal" id="bio"></div>
+      <div class="featured reveal" id="featured"></div>
+      <h3 class="contact-heading reveal">bookings</h3>
+      <p class="booking-blurb reveal">Want to book a shoot or work together? Send the details below or reach out directly.</p>
+      <p class="contact-email"><a id="contact-email" href="#"></a></p>
+      <div class="contact-igs" id="contact-igs"></div>
+
+      <form class="app-form booking-form reveal" id="booking-form" name="booking" method="POST" action="/" data-netlify="true" netlify-honeypot="bot-field">
+        <input type="hidden" name="form-name" value="booking">
+        <p class="hp-field"><label>Don't fill this out: <input name="bot-field"></label></p>
+        <div class="form-grid">
+          <label>Name<input type="text" name="name" required autocomplete="name"></label>
+          <label>Email<input type="email" name="email" required autocomplete="email"></label>
+          <label>What for?
+            <select name="service">
+              <option>Photoshoot</option>
+              <option>Modeling booking</option>
+              <option>Wedding</option>
+              <option>Event</option>
+              <option>Other</option>
+            </select>
+          </label>
+          <label>Preferred date<input type="text" name="date" placeholder="e.g. Sept 12, flexible"></label>
+        </div>
+        <label class="form-wide">Details
+          <textarea name="message" rows="4" placeholder="Location, ideas, budget — whatever helps"></textarea>
+        </label>
+        <button type="submit" class="form-submit">Send booking request</button>
+        <p class="form-status" aria-live="polite"></p>
+      </form>
+    </div>
+  </section>
+
+  <script src="script.js"></script>
+
+  <!-- Netlify Identity: catches the emailed invite/recovery link and drops
+       Desmond straight into the CMS at /admin/. Harmless when not logged in. -->
+  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+  <script>
+    if (window.netlifyIdentity) {
+      window.netlifyIdentity.on('init', user => {
+        if (!user) {
+          window.netlifyIdentity.on('login', () => { document.location.href = '/admin/'; });
+        }
+      });
+    }
+  </script>
+</body>
+</html>
