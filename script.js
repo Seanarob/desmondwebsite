@@ -112,7 +112,11 @@ async function init() {
     igWrap.appendChild(p);
   });
 
-  document.querySelectorAll('form[data-netlify]').forEach(setupFormSubmit);
+  // Bind on the hidden form-name input, NOT on [data-netlify]: Netlify strips
+  // data-netlify and netlify-honeypot from the HTML it serves, so a selector
+  // built on those matches locally and silently matches nothing once deployed.
+  // form-name is what Netlify requires, so it always survives.
+  document.querySelectorAll('form input[name="form-name"]').forEach(input => setupFormSubmit(input.form));
   buildMenu(content);
   setupReveals();
   setupParallax(heroBg);
