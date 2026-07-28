@@ -104,6 +104,16 @@ Three forms, all handled by Netlify. No backend, no third-party service.
 | `fit-of-the-week` | Fit Check section | Name, email, IG, city, **photo upload**, description |
 | `booking` | About section | Name, email, service type, date, details |
 
+**Netlify ships new sites with form detection turned OFF.** Until you turn it on, submitting returns
+a 404 and the data is lost. Do this first:
+
+1. **Forms → Enable form detection**
+2. **Deploys → Trigger deploy → Deploy site**
+
+The second step is required — Netlify only scans HTML for forms during a deploy, so flipping the
+toggle does nothing to the build that's already live. All three forms register at once, since they're
+all in the same `index.html`.
+
 Submissions appear in the Netlify dashboard under **Forms**. Photos from Fit Check are downloadable
 right from each submission.
 
@@ -179,6 +189,9 @@ sips --resampleHeightWidthMax 1800 photo.jpg
   `scrollTo` doesn't reliably fire scroll events.
 - **Tiles are sized from image aspect ratio after load** (`sizeTile`), so layout shifts as photos come
   in. `history.scrollRestoration` is set to `manual` for that reason.
+- **Never bind JS to `data-netlify`.** Netlify strips `data-netlify` and `netlify-honeypot` from the
+  HTML it serves, so any selector built on them works locally and silently breaks in production.
+  `setupFormSubmit` binds on the hidden `form-name` input instead, which Netlify always keeps.
 - **`admin/config.yml` must stay in sync with `content.json`.** If you add a field to one, add it to
   the other or it won't be editable in the CMS. The `branch:` in that file must match the repo's
   default branch (`main`).
