@@ -644,10 +644,33 @@ function buildTile(project) {
   const img = document.createElement('img');
   img.src = project.images[0];
   img.alt = '';
+  img.decoding = 'async';
   tile.appendChild(img);
 
   let index = 0;
   if (project.images.length > 1) {
+    // The rest of a carousel's photos used to be fetched at click time, which
+    // reads as a lag and a flash the first time you press any tile. Fetch them
+    // ahead of the click instead — at low priority and during idle time, so
+    // they never compete with the photos still painting on screen.
+    let warmed = false;
+    tile.warmCarousel = () => {
+      if (warmed) return;
+      warmed = true;
+      project.images.slice(1).forEach(src => {
+        const pre = new Image();
+        pre.fetchPriority = 'low';
+        pre.decoding = 'async';
+        pre.src = src;
+      });
+    };
+    // Hover fires well before the click on desktop. On touch there's no hover,
+    // so a plain timer is what makes the first tap instant. Deliberately not
+    // rAF/IntersectionObserver/requestIdleCallback: those don't run while the
+    // tab is backgrounded, which is exactly when prefetching is free.
+    tile.addEventListener('pointerenter', tile.warmCarousel, { once: true });
+    setTimeout(tile.warmCarousel, 1500);
+
     const counter = document.createElement('span');
     counter.className = 'counter';
     counter.textContent = `1/${project.images.length}`;
