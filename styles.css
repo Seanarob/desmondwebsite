@@ -939,6 +939,12 @@ body {
   .about-photo { height: 47vh; right: 40vw; bottom: 16vh; }
   .about-hero { height: 92vh; }
 
+  /* iOS Safari force-zooms the page when a focused input is under 16px, which
+     yanks the layout around on every tap. 16px is the minimum that avoids it. */
+  .app-form input,
+  .app-form select,
+  .app-form textarea { font-size: 16px; }
+
   /* Winner card stacks: photo on top, caption under it */
   .fit-winner { flex-direction: column; }
   .fit-winner-photo { width: 100%; max-width: none; max-height: 62vh; }

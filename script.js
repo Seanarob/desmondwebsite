@@ -395,9 +395,25 @@ function setupPhotoPicker() {
   const text = document.getElementById('fit-drop-text');
   const form = input.form;
 
+  const status = form.querySelector('.form-status');
+
   input.addEventListener('change', () => {
     const file = input.files[0];
     if (!file) return;
+
+    // Phones let you pick videos and other junk even with accept="image/*".
+    // Say so now rather than failing after they've filled the whole form in.
+    if (!file.type.startsWith('image/')) {
+      input.value = '';
+      preview.hidden = true;
+      preview.removeAttribute('src');
+      status.textContent = 'That’s not a photo — pick an image from your camera roll.';
+      status.classList.add('is-error');
+      return;
+    }
+
+    status.textContent = '';
+    status.classList.remove('is-error');
     const url = URL.createObjectURL(file);
     preview.src = url;
     preview.hidden = false;
@@ -409,7 +425,7 @@ function setupPhotoPicker() {
   form.addEventListener('reset', () => {
     preview.hidden = true;
     preview.removeAttribute('src');
-    text.innerHTML = 'Tap to add your photo<small>full-body works best · jpg or png</small>';
+    text.innerHTML = 'Tap to add your photo<small>straight from your camera roll · full-body works best</small>';
   });
 }
 
@@ -417,6 +433,9 @@ function setupPhotoPicker() {
 // can eat most of that. Re-encode to a sane size in the browser first.
 const MAX_EDGE = 1600;
 const SAFE_BYTES = 6 * 1024 * 1024;
+// Hard ceiling for the whole POST. Netlify's limit is 8MB; the rest of the
+// fields are tiny, so this leaves comfortable headroom.
+const MAX_UPLOAD_BYTES = 7 * 1024 * 1024;
 
 async function shrinkImage(file) {
   if (!file.type.startsWith('image/')) return file;
@@ -432,15 +451,23 @@ async function shrinkImage(file) {
     bitmap.close();
     return file;
   }
-  const canvas = document.createElement('canvas');
-  canvas.width = Math.round(bitmap.width * scale);
-  canvas.height = Math.round(bitmap.height * scale);
-  canvas.getContext('2d').drawImage(bitmap, 0, 0, canvas.width, canvas.height);
-  bitmap.close();
 
-  const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/jpeg', 0.85));
-  if (!blob || blob.size >= file.size) return file;
-  return new File([blob], file.name.replace(/\.[^.]+$/, '') + '.jpg', { type: 'image/jpeg' });
+  // Step down until it fits. Modern phone cameras (48MP+) can still land over
+  // the cap at 1600px, so one pass isn't always enough.
+  let out = file;
+  for (const [edge, quality] of [[MAX_EDGE, 0.85], [1200, 0.8], [900, 0.75]]) {
+    const s = Math.min(1, edge / Math.max(bitmap.width, bitmap.height));
+    const canvas = document.createElement('canvas');
+    canvas.width = Math.round(bitmap.width * s);
+    canvas.height = Math.round(bitmap.height * s);
+    canvas.getContext('2d').drawImage(bitmap, 0, 0, canvas.width, canvas.height);
+    const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/jpeg', quality));
+    if (!blob) break;
+    out = new File([blob], file.name.replace(/\.[^.]+$/, '') + '.jpg', { type: 'image/jpeg' });
+    if (out.size <= MAX_UPLOAD_BYTES) break;
+  }
+  bitmap.close();
+  return out.size < file.size ? out : file;
 }
 
 function setupFormSubmit(form) {
@@ -457,7 +484,18 @@ function setupFormSubmit(form) {
       if (fileInput) {
         const data = new FormData(form);
         const file = fileInput.files[0];
-        if (file) data.set(fileInput.name, await shrinkImage(file));
+        if (file) {
+          const prepared = await shrinkImage(file);
+          // A format we couldn't decode (so couldn't shrink) can still be huge.
+          // Better to say why than to let the POST fail with a generic error.
+          if (prepared.size > MAX_UPLOAD_BYTES) {
+            status.textContent = 'That photo’s too big to send. Try a different one from your camera roll.';
+            status.classList.add('is-error');
+            button.disabled = false;
+            return;
+          }
+          data.set(fileInput.name, prepared);
+        }
         // Multipart: no Content-Type header, the browser sets its own boundary.
         res = await fetch('/', { method: 'POST', body: data });
       } else {
