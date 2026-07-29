@@ -16,6 +16,10 @@
   <meta name="twitter:card" content="summary_large_image">
 
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23000'/%3E%3Ctext x='16' y='23' font-family='Georgia,serif' font-size='21' font-weight='bold' fill='%2396ABE3' text-anchor='middle'%3ED%3C/text%3E%3C/svg%3E">
+  <!-- The hero photo's URL lives in content.json, so the browser can't discover
+       it until script.js has fetched that file. Preloading content.json starts
+       it in parallel with the script instead of after it. -->
+  <link rel="preload" href="content.json" as="fetch" crossorigin="anonymous">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Comfortaa:wght@400;700&family=Baloo+2:wght@700;800&display=swap" rel="stylesheet">

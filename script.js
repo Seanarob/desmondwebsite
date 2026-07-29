@@ -15,7 +15,13 @@ async function init() {
 
   // Hero
   const heroBg = document.getElementById('hero-bg');
+  // Tint the empty hero to match the photo so the wait reads as intentional
+  // instead of as a broken gray screen on a slow phone connection.
+  if (content.hero.placeholderColor) {
+    document.querySelector('.hero').style.backgroundColor = content.hero.placeholderColor;
+  }
   heroBg.style.backgroundImage = `url('${content.hero.image}')`;
+  revealHeroWhenReady(heroBg, content.hero.image);
   document.getElementById('sticker-line-1').textContent = content.hero.stickerLine1;
   document.getElementById('sticker-line-2').textContent = content.hero.stickerLine2;
   document.getElementById('scroll-arrow').addEventListener('click', () => {
@@ -122,6 +128,23 @@ async function init() {
   setupParallax(heroBg);
   absolutizeSocialImage();
   document.body.classList.add('loaded');
+}
+
+// Hold the hero fade until the photo is decoded and ready to paint. Reveals
+// regardless of what happens — a missing or broken photo shows the tinted
+// placeholder rather than leaving the screen blank forever.
+async function revealHeroWhenReady(heroBg, src) {
+  try {
+    const img = new Image();
+    img.src = src;
+    await Promise.race([
+      img.decode(),
+      new Promise(resolve => setTimeout(resolve, 4000))
+    ]);
+  } catch {
+    /* broken or missing hero photo — fall through and reveal anyway */
+  }
+  heroBg.classList.add('ready');
 }
 
 // og:image is authored relative so it survives the move from *.netlify.app to

@@ -33,6 +33,7 @@ collections:
             collapsed: true
             fields:
               - { name: image, label: "Big background photo", widget: image }
+              - { name: placeholderColor, label: "Loading colour", widget: color, required: false, hint: "Shown for a split second while the photo loads. Pick a colour from the photo so it doesn't flash." }
               - { name: stickerLine1, label: "Sticker — top line", widget: string }
               - { name: stickerLine2, label: "Sticker — bottom line", widget: string }
 

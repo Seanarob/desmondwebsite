@@ -178,8 +178,13 @@ body {
   background-position: center top;
   transform: scale(1.32);
   will-change: transform;
-  animation: heroIn 1.6s ease-out;
+  opacity: 0;
 }
+
+/* The fade only runs once the photo has actually decoded (script.js adds
+   .ready). Animating before then plays the whole 1.6s against an empty box,
+   and the image pops in afterwards with no transition at all. */
+.hero-bg.ready { animation: heroIn 1.6s ease-out forwards; }
 
 @keyframes heroIn {
   from { transform: scale(1.5); opacity: 0; }
