@@ -235,6 +235,8 @@ function buildMenu(content) {
     contact.appendChild(a);
   });
 
+  addStaffLink(contact);
+
   function setMenuOpen(open) {
     overlay.classList.toggle('open', open);
     toggle.classList.toggle('open', open);
@@ -247,6 +249,24 @@ function buildMenu(content) {
   document.addEventListener('keydown', e => {
     if (e.key === 'Escape') setMenuOpen(false);
   });
+}
+
+// Small staff link at the bottom of the menu. It's just a link — the dashboard
+// handles its own login, and the data behind it is gated server-side, so this
+// being visible gives a visitor nothing.
+function addStaffLink(container) {
+  const link = document.createElement('a');
+  link.className = 'menu-staff';
+  link.href = '/dashboard.html';
+  link.textContent = 'Log in';
+  container.appendChild(link);
+
+  const identity = window.netlifyIdentity;
+  if (!identity) return;
+  const sync = user => { link.textContent = user ? 'Dashboard' : 'Log in'; };
+  identity.on('init', sync);
+  identity.on('login', () => sync(true));
+  identity.on('logout', () => sync(null));
 }
 
 function renderCasting(casting) {

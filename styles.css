@@ -147,6 +147,18 @@ body {
 
 .menu-contact a:hover { text-decoration: underline; }
 
+/* Staff link — deliberately quiet, it means nothing to a visitor */
+.menu-staff {
+  margin-top: 22px;
+  font-size: 11px !important;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #5a5e6b !important;
+  opacity: .8;
+}
+
+.menu-staff:hover { color: var(--banner-blue) !important; opacity: 1; }
+
 /* Anchor jumps shouldn't hide section tops under the fixed nav */
 #modeling, #photography, #casting, #application-form, #fit, #fit-form, #booking-form, #about {
   scroll-margin-top: 20px;

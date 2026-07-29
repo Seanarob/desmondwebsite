@@ -179,7 +179,9 @@
     if (window.netlifyIdentity) {
       window.netlifyIdentity.on('init', user => {
         if (!user) {
-          window.netlifyIdentity.on('login', () => { document.location.href = '/admin/'; });
+          // Emailed invite/recovery links land here — send them to the dashboard,
+          // which is the hub. "Edit site" there reaches the CMS.
+          window.netlifyIdentity.on('login', () => { document.location.href = '/dashboard.html'; });
         }
       });
     }
