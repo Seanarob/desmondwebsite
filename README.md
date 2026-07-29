@@ -76,8 +76,22 @@ Same Netlify Identity login as the CMS, so one password covers everything.
 
 **Photos tab** (the main one). Every photo on the site in a visual grid, grouped the way the site
 is — Home screen, Modeling, each Photography category, Fit Check winners, About portrait. Each
-photo has **Replace** and **Delete**; each portfolio group has **+ Add photos** (multi-select).
-Hero and About portrait are replace-only, since the site needs them to exist.
+photo has **Replace** and **Delete**. Hero and About portrait are replace-only, since the site
+needs them to exist.
+
+**Stacks.** A tile on the site can hold several photos that visitors click through. The editor
+shows those as one card with a blue frame, a `STACK · n` badge, and each photo numbered in the
+order visitors see them. To manage stacking:
+
+| Action | Where |
+|---|---|
+| Add photos, each as its own tile | **+ Add photos** in the group header |
+| Add photos as one click-through stack | **+ Add as stack** in the group header |
+| Turn an existing single photo into a stack | **+ Stack a photo on this** on the card |
+| Add more to an existing stack | **+ Add to stack** on the card |
+| Split a stack into separate tiles | **Unstack** on the card |
+
+Deleting the last photo in a tile removes the tile, so the site never renders an empty box.
 
 Saving commits straight to GitHub through Git Gateway using his login — no tokens, no git. Netlify
 redeploys automatically, so changes are live in about a minute. Uploads are re-encoded to 2000px
