@@ -13,16 +13,71 @@
         {
           "name": "",
           "projects": [
-            { "span": 1, "images": ["photos/modeling/IMG_8244.JPG"] },
-            { "span": 1, "images": ["photos/modeling/IMG_8231.JPG", "photos/modeling/IMG_8248.JPG"] },
-            { "span": 1, "images": ["photos/modeling/PIC09911.JPG"] },
-            { "span": 1, "images": ["photos/modeling/DSC05300-2.JPEG", "photos/modeling/DSC05307-2.JPEG"] },
-            { "span": 1, "images": ["photos/modeling/DSC05311.JPEG"] },
-            { "span": 1, "images": ["photos/modeling/IMG_7046.JPG", "photos/modeling/IMG_7073.JPG"] },
-            { "span": 1, "images": ["photos/modeling/IMG_6362.JPG", "photos/modeling/IMG_6363.JPG"] },
-            { "span": 1, "images": ["photos/modeling/IMG_8703.JPG", "photos/modeling/IMG_8704.JPG"] },
-            { "span": 1, "images": ["photos/modeling/B83F1171-151D-40B8-98B8-E8BC0A8DCD41.JPG"] },
-            { "span": 1, "images": ["photos/modeling/DSC08478.JPG"] }
+            {
+              "span": 1,
+              "images": [
+                "photos/modeling/IMG_8244.JPG"
+              ]
+            },
+            {
+              "span": 1,
+              "images": [
+                "photos/modeling/IMG_8231.JPG",
+                "photos/modeling/IMG_8248.JPG"
+              ]
+            },
+            {
+              "span": 1,
+              "images": [
+                "photos/modeling/PIC09911.JPG"
+              ]
+            },
+            {
+              "span": 1,
+              "images": [
+                "photos/modeling/DSC05300-2.JPEG",
+                "photos/modeling/DSC05307-2.JPEG"
+              ]
+            },
+            {
+              "span": 1,
+              "images": [
+                "photos/modeling/DSC05311.JPEG"
+              ]
+            },
+            {
+              "span": 1,
+              "images": [
+                "photos/modeling/IMG_7046.JPG",
+                "photos/modeling/IMG_7073.JPG"
+              ]
+            },
+            {
+              "span": 1,
+              "images": [
+                "photos/modeling/IMG_6362.JPG",
+                "photos/modeling/IMG_6363.JPG"
+              ]
+            },
+            {
+              "span": 1,
+              "images": [
+                "photos/modeling/IMG_8703.JPG",
+                "photos/modeling/IMG_8704.JPG"
+              ]
+            },
+            {
+              "span": 1,
+              "images": [
+                "photos/modeling/B83F1171-151D-40B8-98B8-E8BC0A8DCD41.JPG"
+              ]
+            },
+            {
+              "span": 1,
+              "images": [
+                "photos/modeling/DSC08478.JPG"
+              ]
+            }
           ]
         }
       ]
@@ -33,51 +88,184 @@
         {
           "name": "FASHION",
           "projects": [
-            { "span": 1, "images": ["photos/photography/IMG_0105.JPG", "photos/photography/IMG_0510.JPG"] },
-            { "span": 1, "images": ["photos/photography/IMG_8221.JPG"] },
-            { "span": 1, "images": ["photos/photography/IMG_8219.JPG"] },
-            { "span": 1, "images": ["photos/photography/IMG_8224.JPG"] },
-            { "span": 1, "images": ["photos/photography/IMG_0720.JPG", "photos/photography/IMG_0724.JPG"] },
-            { "span": 1, "images": ["photos/photography/IMG_1348.JPG"] },
-            { "span": 1, "images": ["photos/photography/IMG_1350.JPG"] },
-            { "span": 1, "images": ["photos/photography/IMG_1352.JPG"] },
-            { "span": 1, "images": ["photos/photography/IMG_1563.JPG", "photos/photography/IMG_1566.JPG"] }
+            {
+              "span": 1,
+              "images": [
+                "photos/photography/IMG_0105.JPG",
+                "photos/photography/IMG_0510.JPG"
+              ]
+            },
+            {
+              "span": 1,
+              "images": [
+                "photos/photography/IMG_8221.JPG"
+              ]
+            },
+            {
+              "span": 1,
+              "images": [
+                "photos/photography/IMG_8219.JPG"
+              ]
+            },
+            {
+              "span": 1,
+              "images": [
+                "photos/photography/IMG_8224.JPG"
+              ]
+            },
+            {
+              "span": 1,
+              "images": [
+                "photos/photography/IMG_0720.JPG",
+                "photos/photography/IMG_0724.JPG"
+              ]
+            },
+            {
+              "span": 1,
+              "images": [
+                "photos/photography/IMG_1348.JPG"
+              ]
+            },
+            {
+              "span": 1,
+              "images": [
+                "photos/photography/IMG_1350.JPG"
+              ]
+            },
+            {
+              "span": 1,
+              "images": [
+                "photos/photography/IMG_1352.JPG"
+              ]
+            },
+            {
+              "span": 1,
+              "images": [
+                "photos/photography/IMG_1563.JPG",
+                "photos/photography/IMG_1566.JPG"
+              ]
+            }
           ]
         },
         {
           "name": "SPORTS",
           "projects": [
-            { "span": 1, "images": ["photos/photography/IMG_9196.JPG", "photos/photography/IMG_9190.JPG", "photos/photography/IMG_9200.JPG"] },
-            { "span": 1, "images": ["photos/photography/IMG_6859.JPG"] },
-            { "span": 1, "images": ["photos/photography/IMG_2326.JPG"] },
-            { "span": 1, "images": ["photos/photography/IMG_2328.JPG"] },
-            { "span": 1, "images": ["photos/photography/IMG_2331.JPG"] },
-            { "span": 1, "images": ["photos/photography/IMG_1312.JPG"] },
-            { "span": 1, "images": ["photos/photography/IMG_1130.JPG", "photos/photography/IMG_1132.JPG"] },
-            { "span": 1, "images": ["photos/photography/PIC01963.JPG"] },
-            { "span": 1, "images": ["photos/photography/IMG_0932.JPG"] }
+            {
+              "span": 1,
+              "images": [
+                "photos/photography/IMG_9196.JPG",
+                "photos/photography/IMG_9190.JPG",
+                "photos/photography/IMG_9200.JPG"
+              ]
+            },
+            {
+              "span": 1,
+              "images": [
+                "photos/photography/IMG_6859.JPG"
+              ]
+            },
+            {
+              "span": 1,
+              "images": [
+                "photos/photography/IMG_2326.JPG"
+              ]
+            },
+            {
+              "span": 1,
+              "images": [
+                "photos/photography/IMG_2328.JPG"
+              ]
+            },
+            {
+              "span": 1,
+              "images": [
+                "photos/photography/IMG_2331.JPG"
+              ]
+            },
+            {
+              "span": 1,
+              "images": [
+                "photos/photography/IMG_1312.JPG"
+              ]
+            },
+            {
+              "span": 1,
+              "images": [
+                "photos/photography/IMG_1130.JPG",
+                "photos/photography/IMG_1132.JPG"
+              ]
+            },
+            {
+              "span": 1,
+              "images": [
+                "photos/photography/PIC01963.JPG"
+              ]
+            },
+            {
+              "span": 1,
+              "images": [
+                "photos/photography/IMG_0932.JPG"
+              ]
+            }
           ]
         },
         {
           "name": "WEDDING",
           "projects": [
-            { "span": 1, "images": ["photos/photography/IMG_2151.JPG"] },
-            { "span": 1, "images": ["photos/photography/IMG_2149.JPG"] },
-            { "span": 1, "images": ["photos/photography/IMG_2156.JPG"] }
+            {
+              "span": 1,
+              "images": [
+                "photos/photography/IMG_2151.JPG"
+              ]
+            },
+            {
+              "span": 1,
+              "images": [
+                "photos/photography/IMG_2149.JPG"
+              ]
+            },
+            {
+              "span": 1,
+              "images": [
+                "photos/photography/IMG_2156.JPG"
+              ]
+            }
           ]
         },
         {
           "name": "EVENTS",
           "projects": [
-            { "span": 1, "images": ["photos/photography/IMG_8903.JPG", "photos/photography/IMG_8934.JPG"] },
-            { "span": 1, "images": ["photos/photography/IMG_0935.JPG", "photos/photography/IMG_0940.JPG"] }
+            {
+              "span": 1,
+              "images": [
+                "photos/photography/IMG_8903.JPG",
+                "photos/photography/IMG_8934.JPG"
+              ]
+            },
+            {
+              "span": 1,
+              "images": [
+                "photos/photography/IMG_0935.JPG",
+                "photos/photography/IMG_0940.JPG"
+              ]
+            }
           ]
         },
         {
           "name": "GRADUATION",
           "projects": [
-            { "span": 1, "images": ["photos/photography/IMG_1475.JPG"] },
-            { "span": 1, "images": ["photos/photography/IMG_1479.JPG"] }
+            {
+              "span": 1,
+              "images": [
+                "photos/photography/IMG_1475.JPG"
+              ]
+            },
+            {
+              "span": 1,
+              "images": [
+                "photos/photography/IMG_1479.JPG"
+              ]
+            }
           ]
         }
       ]
@@ -88,8 +276,8 @@
     "intro": "Upcoming shoots — apply online below. No experience required unless noted.",
     "shoots": [
       {
-        "title": "Streetwear Editorial",
-        "date": "August 2026",
+        "title": "Test Shoot",
+        "date": "December 4th",
         "location": "Sacramento, CA",
         "description": "Looking for 2-3 models for an outdoor streetwear shoot. All looks provided.",
         "open": true
@@ -123,8 +311,14 @@
     "featuredIn": [],
     "email": "desmondflanagan07@gmail.com",
     "instagrams": [
-      { "handle": "dezflanagann", "label": "personal" },
-      { "handle": "awfullottapics", "label": "photography" }
+      {
+        "handle": "dezflanagann",
+        "label": "personal"
+      },
+      {
+        "handle": "awfullottapics",
+        "label": "photography"
+      }
     ]
   }
 }
