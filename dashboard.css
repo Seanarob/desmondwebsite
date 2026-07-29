@@ -131,6 +131,173 @@
   padding: 50px 0;
 }
 
+/* ---------- TOP-LEVEL VIEW SWITCH ---------- */
+.dash-views {
+  display: flex;
+  justify-content: center;
+  gap: 0;
+  margin-bottom: 40px;
+  border-bottom: 1px solid rgba(255, 255, 255, .12);
+}
+
+.dash-view-btn {
+  font-family: 'Baloo 2', sans-serif;
+  font-weight: 800;
+  font-size: 16px;
+  letter-spacing: .5px;
+  color: #7c8090;
+  background: none;
+  border: none;
+  border-bottom: 3px solid transparent;
+  padding: 12px 26px;
+  cursor: pointer;
+  transition: color .2s, border-color .2s;
+}
+
+.dash-view-btn:hover { color: #fff; }
+.dash-view-btn.active { color: #fff; border-bottom-color: var(--banner-blue); }
+
+/* ---------- PHOTO MANAGER ---------- */
+.photos-intro {
+  text-align: center;
+  color: #7c8090;
+  font-size: 13px;
+  margin-bottom: 40px;
+}
+
+.photo-group { margin-bottom: 54px; }
+
+.photo-group-head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  border-bottom: 1px solid rgba(255, 255, 255, .12);
+  padding-bottom: 12px;
+  margin-bottom: 6px;
+}
+
+.photo-group-head h2 {
+  font-family: 'Permanent Marker', cursive;
+  font-size: 21px;
+  font-weight: 400;
+  color: #fff;
+  letter-spacing: .5px;
+}
+
+.photo-count {
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #7c8090;
+}
+
+.photo-add {
+  margin-left: auto;
+  font-family: 'Baloo 2', sans-serif;
+  font-weight: 800;
+  font-size: 13px;
+  color: #fff;
+  background: var(--banner-blue);
+  border: none;
+  border-radius: 999px;
+  padding: 9px 20px;
+  cursor: pointer;
+  transition: filter .2s;
+}
+
+.photo-add:hover { filter: brightness(1.12); }
+
+.photo-note {
+  font-size: 12px;
+  color: #6b6f7d;
+  margin-bottom: 18px;
+}
+
+.photo-empty {
+  font-size: 13px;
+  color: #6b6f7d;
+  padding: 18px 0 6px;
+}
+
+.photo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 18px;
+}
+
+.photo-tile {
+  position: relative;
+  background: #17181d;
+  border: 1px solid rgba(255, 255, 255, .1);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.photo-tile img {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  display: block;
+  background: #23252c;
+}
+
+.photo-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #fff;
+  background: rgba(0, 0, 0, .72);
+  border-radius: 999px;
+  padding: 4px 10px;
+}
+
+.photo-actions {
+  display: flex;
+  gap: 8px;
+  padding: 10px;
+}
+
+.photo-btn {
+  flex: 1;
+  font-family: 'Comfortaa', sans-serif;
+  font-size: 12px;
+  color: #fff;
+  background: rgba(255, 255, 255, .1);
+  border: 1px solid rgba(255, 255, 255, .16);
+  border-radius: 7px;
+  padding: 8px 6px;
+  cursor: pointer;
+  transition: background .2s, border-color .2s;
+}
+
+.photo-btn:hover { background: var(--banner-blue); border-color: var(--banner-blue); }
+.photo-btn-danger:hover { background: #a8434c; border-color: #a8434c; }
+
+/* ---------- SAVE TOAST ---------- */
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 26px;
+  transform: translateX(-50%);
+  z-index: 200;
+  max-width: min(560px, 92vw);
+  font-size: 14px;
+  color: #fff;
+  border-radius: 999px;
+  padding: 13px 26px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, .5);
+  text-align: center;
+}
+
+.toast-working { background: #3b3f52; }
+.toast-ok { background: #3f7d55; }
+.toast-error { background: #a8434c; }
+
 /* ---------- FIT CHECK PHOTO GRID ---------- */
 /* The point of this page: compare fits side by side instead of clicking
    through Netlify's list one submission at a time. */

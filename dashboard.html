@@ -33,11 +33,20 @@
     <h1 class="dash-title">Dashboard</h1>
     <p class="dash-who" id="who"></p>
 
-    <nav class="dash-tabs" id="tabs"></nav>
-    <div id="panels"></div>
+    <nav class="dash-views">
+      <button class="dash-view-btn active" data-view="photos">Photos</button>
+      <button class="dash-view-btn" data-view="submissions">Submissions</button>
+    </nav>
+
+    <div id="photos-view"></div>
+
+    <div id="submissions-view" hidden>
+      <nav class="dash-tabs" id="tabs"></nav>
+      <div id="panels"></div>
+    </div>
   </main>
 
   <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
-  <script src="dashboard.js"></script>
+  <script type="module" src="dashboard.js"></script>
 </body>
 </html>

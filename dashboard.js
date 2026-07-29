@@ -4,6 +4,8 @@
 // the Netlify Function, which refuses to return anything without a valid
 // Identity token. See netlify/functions/submissions.js.
 
+import { openPhotos } from './photos.js';
+
 // Friendly labels for the raw Netlify form names.
 const FORM_LABELS = {
   'fit-of-the-week': 'Fit Checks',
@@ -32,11 +34,24 @@ function showGate(message) {
   if (message) gateText.textContent = message;
 }
 
+// Photos is the default view — it's the job Desmond does most.
+document.querySelectorAll('.dash-view-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.dash-view-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const showPhotos = btn.dataset.view === 'photos';
+    document.getElementById('photos-view').hidden = !showPhotos;
+    document.getElementById('submissions-view').hidden = showPhotos;
+  });
+});
+
 async function onLogin(user) {
   gate.hidden = true;
   main.hidden = false;
   logoutBtn.hidden = false;
   document.getElementById('who').textContent = 'Signed in as ' + user.email;
+
+  openPhotos();
 
   const panels = document.getElementById('panels');
   panels.innerHTML = '<p class="dash-loading">Loading submissions…</p>';

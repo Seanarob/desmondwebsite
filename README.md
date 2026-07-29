@@ -69,6 +69,30 @@ files keep working exactly as they are.
 
 ---
 
+## 2b. The dashboard — how Desmond actually uses the site
+
+`/dashboard.html`, reached from the small **Log in** link at the bottom of the site's menu.
+Same Netlify Identity login as the CMS, so one password covers everything.
+
+**Photos tab** (the main one). Every photo on the site in a visual grid, grouped the way the site
+is — Home screen, Modeling, each Photography category, Fit Check winners, About portrait. Each
+photo has **Replace** and **Delete**; each portfolio group has **+ Add photos** (multi-select).
+Hero and About portrait are replace-only, since the site needs them to exist.
+
+Saving commits straight to GitHub through Git Gateway using his login — no tokens, no git. Netlify
+redeploys automatically, so changes are live in about a minute. Uploads are re-encoded to 2000px
+in the browser first, which keeps the repo small; PNGs stay PNG so the transparent About cutout
+survives.
+
+**Submissions tab.** Casting applications, bookings, and Fit Checks. Fit Checks render as a photo
+grid so the weekly winner can be picked by comparing entries side by side.
+
+**Edit site** (top right) opens the CMS for text — bio, casting call details, Fit Check winner
+names and weeks.
+
+> Photo work belongs in the dashboard; text work belongs in the CMS. That split is deliberate —
+> a nested JSON form is a bad way to manage 50 photos, and a photo grid is a bad way to edit a bio.
+
 ## 3. Custom domain
 
 Buy the domain first (Namecheap, Porkbun, and Cloudflare are all fine — roughly $10–15/year for a .com).
