@@ -5,6 +5,7 @@
 // Identity token. See netlify/functions/submissions.js.
 
 import { openPhotos } from './photos.js';
+import { openCastings } from './castings.js';
 
 // Friendly labels for the raw Netlify form names.
 const FORM_LABELS = {
@@ -35,13 +36,19 @@ function showGate(message) {
 }
 
 // Photos is the default view — it's the job Desmond does most.
+const VIEWS = { photos: 'photos-view', castings: 'castings-view', submissions: 'submissions-view' };
+
 document.querySelectorAll('.dash-view-btn').forEach(btn => {
   btn.addEventListener('click', () => {
+    const chosen = btn.dataset.view;
     document.querySelectorAll('.dash-view-btn').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
-    const showPhotos = btn.dataset.view === 'photos';
-    document.getElementById('photos-view').hidden = !showPhotos;
-    document.getElementById('submissions-view').hidden = showPhotos;
+    Object.entries(VIEWS).forEach(([name, id]) => {
+      document.getElementById(id).hidden = name !== chosen;
+    });
+    // Reload on open so a tab never shows content another tab has since changed.
+    if (chosen === 'castings') openCastings();
+    if (chosen === 'photos') openPhotos();
   });
 });
 

@@ -5,7 +5,7 @@
 // carousel on the site, so the editor has to show that stacking plainly and
 // let it be built, added to, and taken apart.
 
-import { loadContent, saveContent } from './gitstore.js';
+import { loadContent, commitUpdate } from './gitstore.js';
 
 const MAX_EDGE = 2000;
 const JPEG_QUALITY = 0.86;
@@ -93,23 +93,25 @@ function collectGroups(c) {
 
 // ---------- mutations ----------
 
-const projectsOf = ref => content.sections[ref.si].categories[ref.ci].projects;
+// Every mutation takes the content object explicitly, so it can be replayed
+// against freshly-loaded content at save time instead of a stale local copy.
+const projectsOf = (c, ref) => c.sections[ref.si].categories[ref.ci].projects;
 
-function setPhoto(ref, path) {
-  if (ref.type === 'hero') content.hero.image = path;
-  else if (ref.type === 'about') content.about.photo = path;
-  else if (ref.type === 'fitCurrent') content.fitOfTheWeek.currentWinner.image = path;
-  else if (ref.type === 'fitPast') content.fitOfTheWeek.pastWinners[ref.i].image = path;
-  else projectsOf(ref)[ref.pi].images[ref.ii] = path;
+function setPhoto(c, ref, path) {
+  if (ref.type === 'hero') c.hero.image = path;
+  else if (ref.type === 'about') c.about.photo = path;
+  else if (ref.type === 'fitCurrent') c.fitOfTheWeek.currentWinner.image = path;
+  else if (ref.type === 'fitPast') c.fitOfTheWeek.pastWinners[ref.i].image = path;
+  else projectsOf(c, ref)[ref.pi].images[ref.ii] = path;
 }
 
-function removePhoto(ref) {
-  if (ref.type === 'hero') content.hero.image = '';
-  else if (ref.type === 'about') content.about.photo = '';
-  else if (ref.type === 'fitCurrent') content.fitOfTheWeek.currentWinner.image = '';
-  else if (ref.type === 'fitPast') content.fitOfTheWeek.pastWinners.splice(ref.i, 1);
+function removePhoto(c, ref) {
+  if (ref.type === 'hero') c.hero.image = '';
+  else if (ref.type === 'about') c.about.photo = '';
+  else if (ref.type === 'fitCurrent') c.fitOfTheWeek.currentWinner.image = '';
+  else if (ref.type === 'fitPast') c.fitOfTheWeek.pastWinners.splice(ref.i, 1);
   else {
-    const projects = projectsOf(ref);
+    const projects = projectsOf(c, ref);
     projects[ref.pi].images.splice(ref.ii, 1);
     // A tile with nothing left in it would render as an empty box.
     if (!projects[ref.pi].images.length) projects.splice(ref.pi, 1);
@@ -117,24 +119,23 @@ function removePhoto(ref) {
 }
 
 // Each photo becomes its own tile.
-function addSeparateTiles(target, paths) {
-  const projects = content.sections[target.si].categories[target.ci].projects;
+function addSeparateTiles(c, target, paths) {
+  const projects = c.sections[target.si].categories[target.ci].projects;
   paths.forEach(path => projects.push({ span: 1, images: [path] }));
 }
 
 // All the photos become ONE tile — a click-through stack on the site.
-function addAsStack(target, paths) {
-  const projects = content.sections[target.si].categories[target.ci].projects;
-  projects.push({ span: 1, images: paths.slice() });
+function addAsStack(c, target, paths) {
+  c.sections[target.si].categories[target.ci].projects.push({ span: 1, images: paths.slice() });
 }
 
-function addToStack(tileRef, paths) {
-  projectsOf(tileRef)[tileRef.pi].images.push(...paths);
+function addToStack(c, tileRef, paths) {
+  projectsOf(c, tileRef)[tileRef.pi].images.push(...paths);
 }
 
 // Split a stack back into individual tiles, in place.
-function unstack(tileRef) {
-  const projects = projectsOf(tileRef);
+function unstack(c, tileRef) {
+  const projects = projectsOf(c, tileRef);
   const tile = projects[tileRef.pi];
   const singles = tile.images.map(src => ({ span: tile.span || 1, images: [src] }));
   projects.splice(tileRef.pi, 1, ...singles);
@@ -320,8 +321,8 @@ function pickFiles(multiple, onPick) {
 async function doReplace(ref, file) {
   await withBusy('Uploading photo…', async () => {
     const prepared = await prepare(file);
-    setPhoto(ref, prepared.path);
-    await saveContent(content, [prepared], 'Replace a photo from the dashboard');
+    return commitUpdate(c => setPhoto(c, ref, prepared.path),
+      'Replace a photo from the dashboard', [prepared]);
   });
 }
 
@@ -333,9 +334,10 @@ async function doAdd(target, files, asStack) {
     const prepared = [];
     for (const file of files) prepared.push(await prepare(file));
     const paths = prepared.map(p => p.path);
-    if (asStack) addAsStack(target, paths);
-    else addSeparateTiles(target, paths);
-    await saveContent(content, prepared, asStack ? 'Add a photo stack from the dashboard' : 'Add photos from the dashboard');
+    return commitUpdate(
+      c => asStack ? addAsStack(c, target, paths) : addSeparateTiles(c, target, paths),
+      asStack ? 'Add a photo stack from the dashboard' : 'Add photos from the dashboard',
+      prepared);
   });
 }
 
@@ -343,17 +345,15 @@ async function doAddToStack(tileRef, files) {
   await withBusy(`Adding ${files.length} to the stack…`, async () => {
     const prepared = [];
     for (const file of files) prepared.push(await prepare(file));
-    addToStack(tileRef, prepared.map(p => p.path));
-    await saveContent(content, prepared, 'Add photos to a stack from the dashboard');
+    return commitUpdate(c => addToStack(c, tileRef, prepared.map(p => p.path)),
+      'Add photos to a stack from the dashboard', prepared);
   });
 }
 
 async function doUnstack(tileRef, howMany) {
   if (!confirm(`Split this stack into ${howMany} separate tiles?\n\nThe photos stay on the site — they just stop being a click-through group.`)) return;
-  await withBusy('Unstacking…', async () => {
-    unstack(tileRef);
-    await saveContent(content, [], 'Unstack photos from the dashboard');
-  });
+  await withBusy('Unstacking…', () =>
+    commitUpdate(c => unstack(c, tileRef), 'Unstack photos from the dashboard'));
 }
 
 async function doDelete(ref, stacked) {
@@ -361,18 +361,18 @@ async function doDelete(ref, stacked) {
     ? 'Remove this photo from the stack?'
     : 'Remove this photo from the site?';
   if (!confirm(message + '\n\nIt stops showing on the site. This can be undone by re-uploading it.')) return;
-  await withBusy('Removing photo…', async () => {
-    removePhoto(ref);
-    await saveContent(content, [], 'Remove a photo from the dashboard');
-  });
+  await withBusy('Removing photo…', () =>
+    commitUpdate(c => removePhoto(c, ref), 'Remove a photo from the dashboard'));
 }
 
+// `work` returns the content that was actually committed, so the screen
+// redraws from what's on the branch rather than from a local guess.
 async function withBusy(message, work) {
   if (busy) return;
   busy = true;
   showToast(message, 'working');
   try {
-    await work();
+    content = await work();
     showToast('Saved — live in about a minute.', 'ok');
     render();
   } catch (err) {

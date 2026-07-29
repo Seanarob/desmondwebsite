@@ -346,6 +346,126 @@
 .photo-btn:hover { background: var(--banner-blue); border-color: var(--banner-blue); }
 .photo-btn-danger:hover { background: #a8434c; border-color: #a8434c; }
 
+/* ---------- CASTINGS EDITOR ---------- */
+.cast-new { margin: 0 auto 30px; display: block; }
+
+.cast-card {
+  background: #17181d;
+  border: 1px solid rgba(255, 255, 255, .1);
+  border-radius: 10px;
+  padding: 22px;
+  margin-bottom: 20px;
+  max-width: 720px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* A closed casting is still here, just not on the site — dim it so that's obvious */
+.cast-card.is-closed { opacity: .62; }
+
+.cast-card-intro { background: #131419; }
+
+.cast-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.cast-status {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: #9aa0b0;
+  background: rgba(255, 255, 255, .08);
+  border-radius: 999px;
+  padding: 4px 11px;
+}
+
+.cast-status.is-open { color: #fff; background: #3f7d55; }
+
+.cast-delete { flex: 0 0 auto; }
+
+.cast-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+.cast-label {
+  font-size: 11px;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+  color: #8c92a2;
+}
+
+.cast-field input,
+.cast-field textarea {
+  font-family: inherit;
+  font-size: 15px;
+  color: #fff;
+  background: rgba(255, 255, 255, .06);
+  border: 1px solid rgba(255, 255, 255, .16);
+  border-radius: 8px;
+  padding: 11px 13px;
+  outline: none;
+  resize: vertical;
+  transition: border-color .2s;
+}
+
+.cast-field input:focus,
+.cast-field textarea:focus { border-color: var(--banner-blue); }
+
+.cast-hint { font-size: 11px; color: #6b6f7d; }
+
+.cast-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0 16px; }
+
+.cast-toggle {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 2px 10px;
+  align-items: center;
+  cursor: pointer;
+  padding-top: 4px;
+}
+
+.cast-toggle input { width: 17px; height: 17px; accent-color: var(--banner-blue); cursor: pointer; }
+.cast-toggle span { font-size: 14px; color: #fff; }
+.cast-toggle small { grid-column: 2; font-size: 11px; color: #6b6f7d; }
+
+/* Sticks to the bottom while there's anything unsaved */
+.cast-savebar {
+  position: fixed;
+  left: 50%;
+  bottom: 24px;
+  transform: translateX(-50%) translateY(140%);
+  z-index: 150;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #23252c;
+  border: 1px solid rgba(255, 255, 255, .16);
+  border-radius: 999px;
+  padding: 11px 14px 11px 22px;
+  box-shadow: 0 10px 34px rgba(0, 0, 0, .6);
+  transition: transform .28s cubic-bezier(.22, .61, .36, 1);
+  max-width: 94vw;
+}
+
+.cast-savebar.visible { transform: translateX(-50%) translateY(0); }
+.cast-savebar span { font-size: 13px; color: #fff; white-space: nowrap; }
+.cast-savebar .photo-btn { flex: 0 0 auto; }
+.cast-savebar .photo-add { margin-left: 0; }
+
+@media (max-width: 600px) {
+  .cast-row { grid-template-columns: 1fr; }
+  .cast-savebar { padding-left: 16px; gap: 8px; }
+  .cast-savebar span { font-size: 12px; white-space: normal; }
+}
+
 /* ---------- SAVE TOAST ---------- */
 .toast {
   position: fixed;

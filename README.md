@@ -98,14 +98,22 @@ redeploys automatically, so changes are live in about a minute. Uploads are re-e
 in the browser first, which keeps the repo small; PNGs stay PNG so the transparent About cutout
 survives.
 
+**Castings tab.** Create, edit, close and delete casting calls. **+ New casting** adds one; fill in
+name, when, where and details. The **Accepting applications** toggle controls whether it shows on the
+site — turn it off when a shoot is cast and it comes off the site but stays in the list. Edits are
+held locally until **Save changes**, so typing doesn't fire a commit per keystroke, and **Discard**
+puts everything back. A casting can't be saved without a name.
+
 **Submissions tab.** Casting applications, bookings, and Fit Checks. Fit Checks render as a photo
 grid so the weekly winner can be picked by comparing entries side by side.
 
-**Edit site** (top right) opens the CMS for text — bio, casting call details, Fit Check winner
-names and weeks.
+**Edit site** (top right) opens the CMS for what the dashboard doesn't cover — bio, Featured In,
+contact details, and Fit Check winner names/weeks.
 
-> Photo work belongs in the dashboard; text work belongs in the CMS. That split is deliberate —
-> a nested JSON form is a bad way to manage 50 photos, and a photo grid is a bad way to edit a bio.
+> Every dashboard save is a read-modify-write against the branch as it is at that moment
+> (`commitUpdate` in `gitstore.js`). Two tabs are open at once holding their own copies of
+> `content.json`, so writing a stale copy would silently wipe whatever the other tab just saved.
+> Don't reintroduce a save path that commits a locally-held copy directly.
 
 ## 3. Custom domain
 

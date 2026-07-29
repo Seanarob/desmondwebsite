@@ -41,6 +41,26 @@ export async function loadContent() {
   return JSON.parse(json);
 }
 
+/**
+ * Read-modify-write against the branch as it is RIGHT NOW.
+ *
+ * The dashboard has several editors open at once (photos, castings), each
+ * holding its own copy of content.json. Saving a stale copy would silently
+ * wipe whatever the other editor committed in the meantime, so every save
+ * re-reads first and applies its change to fresh content.
+ *
+ * @param {Function} mutate   receives the fresh content object, edits in place
+ * @param {string}   message  commit message
+ * @param {Array}    uploads  [{ path, bytes }] new image files, if any
+ * @returns {object} the content that was committed
+ */
+export async function commitUpdate(mutate, message, uploads = []) {
+  const fresh = await loadContent();
+  mutate(fresh);
+  await saveContent(fresh, uploads, message);
+  return fresh;
+}
+
 function toBase64(bytes) {
   let binary = '';
   const chunk = 0x8000;
