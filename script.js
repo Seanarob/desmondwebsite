@@ -629,6 +629,9 @@ function setupBookingCalendar(config) {
 
     const row = document.createElement('div');
     row.className = 'slots';
+
+    const clearPicks = () => [...row.children].forEach(c => c.classList.remove('picked'));
+
     cfg.slots.forEach(slot => {
       const btn = document.createElement('button');
       btn.type = 'button';
@@ -636,13 +639,64 @@ function setupBookingCalendar(config) {
       btn.textContent = slot;
       btn.addEventListener('click', () => {
         timeInput.value = slot;
-        [...row.children].forEach(c => c.classList.remove('picked'));
+        clearPicks();
         btn.classList.add('picked');
+        custom.hidden = true;
         chosen.textContent = `Requesting ${longDate(picked)} at ${slot}`;
       });
       row.appendChild(btn);
     });
+
+    // The presets are shortcuts, not the whole menu — anyone who wants a time
+    // that isn't listed gets the platform's own time picker (the wheel on iOS).
+    const otherBtn = document.createElement('button');
+    otherBtn.type = 'button';
+    otherBtn.className = 'slot slot-other';
+    otherBtn.textContent = 'Other time';
+    otherBtn.addEventListener('click', () => {
+      clearPicks();
+      otherBtn.classList.add('picked');
+      custom.hidden = false;
+      timeInput.value = clock.value ? to12Hour(clock.value) : '';
+      chosen.textContent = clock.value
+        ? `Requesting ${longDate(picked)} at ${to12Hour(clock.value)}`
+        : 'Choose a time below.';
+      clock.focus();
+      if (clock.showPicker) { try { clock.showPicker(); } catch { /* not allowed without a gesture */ } }
+    });
+    row.appendChild(otherBtn);
     slotsWrap.appendChild(row);
+
+    const custom = document.createElement('div');
+    custom.className = 'slot-custom';
+    custom.hidden = true;
+    const clockLabel = document.createElement('label');
+    clockLabel.className = 'cal-heading';
+    clockLabel.textContent = 'What time works?';
+    const clock = document.createElement('input');
+    clock.type = 'time';
+    clock.className = 'time-input';
+    clock.step = 900; // quarter-hour steps
+    clock.addEventListener('input', () => {
+      if (!clock.value) {
+        timeInput.value = '';
+        chosen.textContent = 'Choose a time below.';
+        return;
+      }
+      timeInput.value = to12Hour(clock.value);
+      chosen.textContent = `Requesting ${longDate(picked)} at ${to12Hour(clock.value)}`;
+    });
+    custom.append(clockLabel, clock);
+    slotsWrap.appendChild(custom);
+  }
+
+  // '13:30' -> '1:30 PM', so submissions read the same whether the time came
+  // from a preset button or the picker.
+  function to12Hour(value) {
+    const [h, m] = value.split(':').map(Number);
+    const suffix = h < 12 ? 'AM' : 'PM';
+    const hour = h % 12 === 0 ? 12 : h % 12;
+    return `${hour}:${String(m).padStart(2, '0')} ${suffix}`;
   }
 
   function longDate(d) {
