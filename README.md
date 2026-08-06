@@ -148,7 +148,7 @@ Three forms, all handled by Netlify. No backend, no third-party service.
 |------|-------------|------------------|
 | `model-application` | Casting section | Name, email, phone, IG, age, height, which shoot, experience |
 | `fit-of-the-week` | Fit Check section | Name, email, IG, city, **photo upload**, description |
-| `booking` | About section | Name, email, service type, **calendar date + time**, details |
+| `booking` | About section | Name, email, phone, service type, **calendar date + time**, details |
 
 **Netlify ships new sites with form detection turned OFF.** Until you turn it on, submitting returns
 a 404 and the data is lost. Do this first:
@@ -169,6 +169,12 @@ Do this once per form and send them to Desmond's email.
 
 Spam is handled by a hidden honeypot field. If junk still gets through, enable reCAPTCHA in the same
 settings area.
+
+> **Changing a form's fields needs a deploy before it works.** Netlify records each form's field list
+> at deploy time. Add, rename or remove a field and submissions fail with a 404 — which the site
+> reports as "Something went wrong" — until a fresh deploy re-registers the schema. Pushing triggers
+> one automatically, so just wait for the deploy to finish and hard-refresh before testing. If it
+> persists, check the form is listed under **Forms** in the dashboard.
 
 ---
 
