@@ -148,7 +148,7 @@ Three forms, all handled by Netlify. No backend, no third-party service.
 |------|-------------|------------------|
 | `model-application` | Casting section | Name, email, phone, IG, age, height, which shoot, experience |
 | `fit-of-the-week` | Fit Check section | Name, email, IG, city, **photo upload**, description |
-| `booking` | About section | Name, email, service type, date, details |
+| `booking` | About section | Name, email, service type, **calendar date + time**, details |
 
 **Netlify ships new sites with form detection turned OFF.** Until you turn it on, submitting returns
 a 404 and the data is lost. Do this first:
@@ -171,6 +171,28 @@ Spam is handled by a hidden honeypot field. If junk still gets through, enable r
 settings area.
 
 ---
+
+## 4b. The booking calendar
+
+Bookings are picked from a calendar rather than typed as free text, so submissions arrive as a real
+date (`2026-08-10`) and time (`1:00 PM`) instead of "sometime in Sept?".
+
+Everything is open by default — a pick is a **request**, not a reservation, so two people can ask for
+the same slot and Desmond confirms whichever he wants. Nothing is auto-booked and no slot is ever
+held. The form won't submit without both a day and a time.
+
+Tunable in the CMS under **Booking calendar** (or `booking` in `content.json`):
+
+| Setting | What it does |
+|---|---|
+| `leadTimeDays` | How much notice is required. `2` = nothing sooner than two days out. |
+| `monthsAhead` | How far ahead the calendar goes. |
+| `slots` | The time buttons shown once a day is picked. |
+| `unavailableWeekdays` | Block whole weekdays. `0` = Sunday, `6` = Saturday. |
+| `unavailableDates` | Block specific days, e.g. `2026-09-14`. For holidays or travel. |
+
+> Dates are keyed with local year/month/day, never `toISOString()` — that converts to UTC and can
+> shift the booking by a day either side of midnight.
 
 ## 5. The weekly Fit Check routine
 

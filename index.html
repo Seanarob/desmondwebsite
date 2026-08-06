@@ -156,7 +156,18 @@
               <option>Other</option>
             </select>
           </label>
-          <label>Preferred date<input type="text" name="date" placeholder="e.g. Sept 12, flexible"></label>
+        </div>
+
+        <!-- Day + time picker. The chosen values ride along in these hidden
+             inputs so the submission arrives as structured data. -->
+        <div class="booking-when">
+          <span class="cal-heading">Pick a day</span>
+          <p class="cal-note" id="booking-note"></p>
+          <div class="calendar" id="booking-calendar"></div>
+          <div class="slots-wrap" id="booking-slots"></div>
+          <input type="hidden" name="date" id="booking-date">
+          <input type="hidden" name="time" id="booking-time">
+          <p class="cal-chosen" id="booking-chosen" aria-live="polite"></p>
         </div>
         <label class="form-wide">Details
           <textarea name="message" rows="4" placeholder="Location, ideas, budget — whatever helps"></textarea>

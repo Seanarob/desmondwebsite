@@ -686,6 +686,132 @@ button, input, select, textarea { font-family: inherit; }
   margin-top: 14px;
 }
 
+/* ---------- BOOKING CALENDAR ---------- */
+.booking-when { margin-bottom: 20px; }
+
+.cal-heading {
+  display: block;
+  font-size: 13px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--body-gray);
+  margin-bottom: 7px;
+}
+
+.cal-note {
+  font-size: 12px;
+  line-height: 1.6;
+  color: #8b8f9c;
+  margin-bottom: 14px;
+}
+
+.calendar {
+  border: 1px solid rgba(255, 255, 255, .16);
+  border-radius: 10px;
+  padding: 14px;
+  background: rgba(255, 255, 255, .04);
+}
+
+.cal-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.cal-month {
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: .5px;
+}
+
+.cal-nav {
+  width: 34px;
+  height: 34px;
+  font-size: 20px;
+  line-height: 1;
+  color: #fff;
+  background: rgba(255, 255, 255, .08);
+  border: 1px solid rgba(255, 255, 255, .16);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background .2s, opacity .2s;
+}
+
+.cal-nav:hover:not(:disabled) { background: var(--banner-blue); }
+.cal-nav:disabled { opacity: .28; cursor: default; }
+
+.cal-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+}
+
+.cal-weekday {
+  text-align: center;
+  font-size: 10px;
+  letter-spacing: 1px;
+  color: #7c8090;
+  padding-bottom: 4px;
+}
+
+.cal-day {
+  aspect-ratio: 1;
+  min-height: 38px;
+  font-size: 14px;
+  color: #fff;
+  background: rgba(255, 255, 255, .06);
+  border: 1px solid transparent;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background .18s, border-color .18s, color .18s;
+}
+
+.cal-day:hover:not(:disabled) { background: rgba(150, 171, 227, .28); }
+
+.cal-day:disabled {
+  color: #4a4d58;
+  background: transparent;
+  cursor: default;
+}
+
+.cal-day.picked {
+  background: var(--banner-blue);
+  border-color: var(--banner-blue);
+  color: #fff;
+  font-weight: 700;
+}
+
+.slots-wrap { margin-top: 18px; }
+
+.slots {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.slot {
+  font-size: 14px;
+  color: #fff;
+  background: rgba(255, 255, 255, .06);
+  border: 1px solid rgba(255, 255, 255, .18);
+  border-radius: 999px;
+  padding: 10px 18px;
+  cursor: pointer;
+  transition: background .18s, border-color .18s;
+}
+
+.slot:hover { border-color: var(--banner-blue); }
+.slot.picked { background: var(--banner-blue); border-color: var(--banner-blue); font-weight: 700; }
+
+.cal-chosen {
+  margin-top: 14px;
+  font-size: 14px;
+  color: var(--text-blue);
+  min-height: 1.3em;
+}
+
 /* ---------- FORMS ---------- */
 .app-form {
   max-width: 640px;
@@ -790,6 +916,45 @@ button, input, select, textarea { font-family: inherit; }
   border: 1px solid #dcdce6;
   color: #333;
 }
+
+/* The calendar defaults to light-on-dark for the rest of the site; the About
+   section is white, so it needs the opposite treatment here. */
+.booking-form .cal-heading { color: #6b6f7d; }
+.booking-form .cal-note { color: #85899a; }
+
+.booking-form .calendar {
+  background: #f4f4f8;
+  border-color: #dcdce6;
+}
+
+.booking-form .cal-month { color: #1a1a1a; }
+
+.booking-form .cal-nav {
+  color: #1a1a1a;
+  background: #fff;
+  border-color: #dcdce6;
+}
+.booking-form .cal-nav:hover:not(:disabled) { background: var(--banner-blue); color: #fff; }
+
+.booking-form .cal-weekday { color: #9296a5; }
+
+.booking-form .cal-day {
+  color: #1a1a1a;
+  background: #fff;
+  border-color: #e6e6ee;
+}
+.booking-form .cal-day:hover:not(:disabled) { background: rgba(150, 171, 227, .3); }
+.booking-form .cal-day:disabled { color: #c3c5d0; background: transparent; border-color: transparent; }
+.booking-form .cal-day.picked { background: var(--banner-blue); border-color: var(--banner-blue); color: #fff; }
+
+.booking-form .slot {
+  color: #1a1a1a;
+  background: #fff;
+  border-color: #dcdce6;
+}
+.booking-form .slot.picked { background: var(--banner-blue); border-color: var(--banner-blue); color: #fff; }
+
+.booking-form .cal-chosen { color: #4d6bbd; font-weight: 700; }
 
 .contact-email a { color: inherit; text-decoration: none; }
 .contact-email a:hover { text-decoration: underline; }

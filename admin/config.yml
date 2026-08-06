@@ -122,6 +122,35 @@ collections:
                   - { name: image, label: "Their fit photo", widget: image }
                   - { name: week, label: "Week", widget: string, required: false }
 
+          - name: booking
+            label: "Booking calendar"
+            widget: object
+            collapsed: true
+            fields:
+              - { name: note, label: "Note under the heading", widget: text, required: false }
+              - { name: leadTimeDays, label: "Days notice needed", widget: number, value_type: int, default: 2, min: 0, hint: "How soon can someone book? 2 = nothing sooner than 2 days out." }
+              - { name: monthsAhead, label: "Months bookable ahead", widget: number, value_type: int, default: 4, min: 1 }
+              - name: slots
+                label: "Times of day"
+                label_singular: "Time"
+                widget: list
+                field: { name: slot, label: "Time", widget: string }
+                hint: "e.g. 9:00 AM. These are the buttons shown once a day is picked."
+              - name: unavailableWeekdays
+                label: "Days of the week to block"
+                label_singular: "Weekday"
+                widget: list
+                required: false
+                field: { name: day, label: "Day number", widget: number, value_type: int, min: 0, max: 6 }
+                hint: "0 = Sunday, 6 = Saturday. Leave empty to keep every day open."
+              - name: unavailableDates
+                label: "Specific dates to block"
+                label_singular: "Date"
+                widget: list
+                required: false
+                field: { name: date, label: "Date", widget: string }
+                hint: "Format: 2026-09-14. Use for holidays or days you're away."
+
           - name: about
             label: "About & contact"
             widget: object

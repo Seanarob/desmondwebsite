@@ -122,6 +122,8 @@ async function init() {
   // data-netlify and netlify-honeypot from the HTML it serves, so a selector
   // built on those matches locally and silently matches nothing once deployed.
   // form-name is what Netlify requires, so it always survives.
+  setupBookingCalendar(content.booking);
+
   document.querySelectorAll('form input[name="form-name"]').forEach(input => setupFormSubmit(input.form));
   buildMenu(content);
   setupReveals();
@@ -511,6 +513,167 @@ async function shrinkImage(file) {
   }
   bitmap.close();
   return out.size < file.size ? out : file;
+}
+
+// ---------- BOOKING CALENDAR ----------
+// Everything is open by default; a pick is a *request* that Desmond confirms,
+// so slots never need to be reserved or checked against each other.
+
+const WEEKDAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June',
+  'July', 'August', 'September', 'October', 'November', 'December'];
+
+// Local-date key. Never use toISOString() here — it converts to UTC and can
+// shift the day by one either side of midnight.
+const dayKey = d => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+const midnight = d => new Date(d.getFullYear(), d.getMonth(), d.getDate());
+
+function setupBookingCalendar(config) {
+  const cal = document.getElementById('booking-calendar');
+  if (!cal) return;
+
+  const cfg = Object.assign({
+    leadTimeDays: 0,
+    monthsAhead: 4,
+    slots: ['10:00 AM', '1:00 PM', '4:00 PM'],
+    unavailableWeekdays: [],
+    unavailableDates: [],
+    note: ''
+  }, config || {});
+
+  const slotsWrap = document.getElementById('booking-slots');
+  const dateInput = document.getElementById('booking-date');
+  const timeInput = document.getElementById('booking-time');
+  const chosen = document.getElementById('booking-chosen');
+  const noteEl = document.getElementById('booking-note');
+  if (cfg.note) noteEl.textContent = cfg.note;
+
+  const today = midnight(new Date());
+  const first = new Date(today);
+  first.setDate(first.getDate() + (cfg.leadTimeDays || 0));
+  const last = new Date(today.getFullYear(), today.getMonth() + cfg.monthsAhead + 1, 0);
+
+  const blockedDates = new Set(cfg.unavailableDates || []);
+  const blockedDays = new Set(cfg.unavailableWeekdays || []);
+  const isOpen = d => d >= first && d <= last &&
+    !blockedDates.has(dayKey(d)) && !blockedDays.has(d.getDay());
+
+  let view = new Date(first.getFullYear(), first.getMonth(), 1);
+  let picked = null;
+
+  function draw() {
+    cal.innerHTML = '';
+
+    const head = document.createElement('div');
+    head.className = 'cal-head';
+
+    const prev = navButton('‹', 'Previous month', () => { view.setMonth(view.getMonth() - 1); draw(); });
+    const next = navButton('›', 'Next month', () => { view.setMonth(view.getMonth() + 1); draw(); });
+    prev.disabled = new Date(view.getFullYear(), view.getMonth(), 0) < first;
+    next.disabled = new Date(view.getFullYear(), view.getMonth() + 1, 1) > last;
+
+    const title = document.createElement('span');
+    title.className = 'cal-month';
+    title.textContent = `${MONTHS[view.getMonth()]} ${view.getFullYear()}`;
+
+    head.append(prev, title, next);
+    cal.appendChild(head);
+
+    const grid = document.createElement('div');
+    grid.className = 'cal-grid';
+    WEEKDAYS.forEach(name => {
+      const cell = document.createElement('span');
+      cell.className = 'cal-weekday';
+      cell.textContent = name.charAt(0);
+      cell.title = name;
+      grid.appendChild(cell);
+    });
+
+    const offset = new Date(view.getFullYear(), view.getMonth(), 1).getDay();
+    for (let i = 0; i < offset; i++) grid.appendChild(document.createElement('span'));
+
+    const daysInMonth = new Date(view.getFullYear(), view.getMonth() + 1, 0).getDate();
+    for (let day = 1; day <= daysInMonth; day++) {
+      const date = new Date(view.getFullYear(), view.getMonth(), day);
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'cal-day';
+      btn.textContent = day;
+      if (!isOpen(date)) {
+        btn.disabled = true;
+      } else {
+        if (picked && dayKey(picked) === dayKey(date)) btn.classList.add('picked');
+        btn.setAttribute('aria-pressed', picked && dayKey(picked) === dayKey(date) ? 'true' : 'false');
+        btn.addEventListener('click', () => {
+          picked = date;
+          dateInput.value = dayKey(date);
+          timeInput.value = '';
+          draw();
+          drawSlots();
+        });
+      }
+      grid.appendChild(btn);
+    }
+    cal.appendChild(grid);
+  }
+
+  function drawSlots() {
+    slotsWrap.innerHTML = '';
+    chosen.textContent = '';
+    if (!picked) return;
+
+    const label = document.createElement('span');
+    label.className = 'cal-heading';
+    label.textContent = 'Pick a time';
+    slotsWrap.appendChild(label);
+
+    const row = document.createElement('div');
+    row.className = 'slots';
+    cfg.slots.forEach(slot => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'slot';
+      btn.textContent = slot;
+      btn.addEventListener('click', () => {
+        timeInput.value = slot;
+        [...row.children].forEach(c => c.classList.remove('picked'));
+        btn.classList.add('picked');
+        chosen.textContent = `Requesting ${longDate(picked)} at ${slot}`;
+      });
+      row.appendChild(btn);
+    });
+    slotsWrap.appendChild(row);
+  }
+
+  function longDate(d) {
+    return `${WEEKDAYS[d.getDay()]}, ${MONTHS[d.getMonth()]} ${d.getDate()}`;
+  }
+
+  function navButton(glyph, label, onClick) {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'cal-nav';
+    b.textContent = glyph;
+    b.setAttribute('aria-label', label);
+    b.addEventListener('click', onClick);
+    return b;
+  }
+
+  // Hidden inputs are skipped by HTML5 validation, so guard the submit here.
+  // Capture phase runs before setupFormSubmit's listener on the same form.
+  dateInput.form.addEventListener('submit', e => {
+    if (dateInput.value && timeInput.value) return;
+    e.preventDefault();
+    e.stopImmediatePropagation();
+    const status = dateInput.form.querySelector('.form-status');
+    status.textContent = !dateInput.value
+      ? 'Pick a day from the calendar first.'
+      : 'Pick a time for that day.';
+    status.classList.add('is-error');
+    cal.scrollIntoView({ block: 'center', behavior: 'smooth' });
+  }, true);
+
+  draw();
 }
 
 function setupFormSubmit(form) {
