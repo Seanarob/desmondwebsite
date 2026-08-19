@@ -276,10 +276,10 @@
     "intro": "Upcoming shoots — apply online below. No experience required unless noted.",
     "shoots": [
       {
-        "title": "Test Shoot",
-        "date": "December 4th",
+        "title": "ToteNCarry Back to school shoot.",
+        "date": "August 27th/28th",
         "location": "Sacramento, CA",
-        "description": "Looking for 2-3 models for an outdoor streetwear shoot. All looks provided.",
+        "description": "Models have been chosen!",
         "open": true
       }
     ]
@@ -303,7 +303,14 @@
     "note": "Pick a day and time that works. Nothing's locked in until Desmond confirms by email.",
     "leadTimeDays": 2,
     "monthsAhead": 4,
-    "slots": ["9:00 AM", "11:00 AM", "1:00 PM", "3:00 PM", "5:00 PM", "7:00 PM"],
+    "slots": [
+      "9:00 AM",
+      "11:00 AM",
+      "1:00 PM",
+      "3:00 PM",
+      "5:00 PM",
+      "7:00 PM"
+    ],
     "unavailableWeekdays": [],
     "unavailableDates": []
   },
